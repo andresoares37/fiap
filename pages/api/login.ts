@@ -15,7 +15,9 @@ export default function handler (req : NextApiRequest, res: NextApiResponse<Defa
         if(req.body)
         {
             const body = req.body as Login;        
-            if(body.login && body.password)
+            if(body.login && body.password
+                && body.login === 'admin@admin.com'
+                && body.password === 'Admin@123')
             {
                 res.status(200).json({msg : 'Login efetuado com sucesso'});
                 return;
