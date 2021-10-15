@@ -1,9 +1,12 @@
 import type {NextApiRequest, NextApiResponse} from 'next';
+import { UserModel } from '../../models/UserModel';
 import {Login} from '../../types/Login';
 import { DefaultResponseMsg } from '../../types/DefautResponseMsg';
+import connectDB from '../../middlewares/connectDB';
+import md5 from 'md5';
+import { User } from '../../types/User';
 
-export default function handler (req : NextApiRequest, res: NextApiResponse<DefaultResponseMsg>)
-{
+const handler = async (req : NextApiRequest, res: NextApiResponse<DefaultResponseMsg>) =>{
     try
     {
         if(req.method !== 'POST')
@@ -14,16 +17,18 @@ export default function handler (req : NextApiRequest, res: NextApiResponse<Defa
 
         if(req.body)
         {
-            const body = req.body as Login;        
-            if(body.login && body.password
-                && body.login === 'admin@admin.com'
-                && body.password === 'Admin@123')
-            {
-                res.status(200).json({msg : 'Login efetuado com sucesso'});
-                return;
+            const auth = req.body as Login;        
+            if(auth.login && auth.password){
+                
+                const usersFound = await UserModel.find({email : auth.login, password: md5(auth.password)});
+                if(usersFound && usersFound.length > 0){
+                    const user = usersFound[0];
+                    res.status(200).json(user);
+                    return;
+                }
             }
         }
-        //res.status(400).json({error: 'Usuário ou senha inválidos'});        
+        res.status(400).json({error: 'Usuário ou senha inválidos'});        
     }
     catch(e)
     {
@@ -31,3 +36,5 @@ export default function handler (req : NextApiRequest, res: NextApiResponse<Defa
         res.status(500).json({error: 'Ocorreu erro ao autenticar usuario , tente novamente '});
     }
 }
+
+export default connectDB(handler);
