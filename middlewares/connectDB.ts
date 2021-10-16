@@ -18,6 +18,8 @@ const connectDB = (handler : NextApiHandler) =>
 
         await mongoose.connect(DB_CONNECTION_STRING);
         mongoose.connection.on('connected', () => console.log('Conectado na database'));
-        mongoose.connection.on('error', err => console.log('Ocorreu erro ao conectar na database'));                
+        mongoose.connection.on('error', err => console.log('Ocorreu erro ao conectar na database')); 
+        
+        return handler(req, res);
     }
     export default connectDB;
