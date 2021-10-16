@@ -16,7 +16,7 @@ const connectDB = (handler : NextApiHandler) =>
             return res.status(500).json({error: 'ENV database não informada'});
         }
 
-        await mongoose.connect('mongodb://localhost:27017/gerenciadorTarefasFiapDB');
+        await mongoose.connect(DB_CONNECTION_STRING);
         mongoose.connection.on('connected', () => console.log('Conectado na database'));
         mongoose.connection.on('error', err => console.log('Ocorreu erro ao conectar na database'));                
     }
