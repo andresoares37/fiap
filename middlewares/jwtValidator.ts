@@ -7,12 +7,11 @@ const jwtValidator = (handler : NextApiHandler) =>
         
         const {MY_SECRET_KEY} = process.env;
         if(!MY_SECRET_KEY){
-            res.status(500).json({ error: 'ENV my secret key nao encontrada '});
-            return;
+            return res.status(500).json({ error: 'ENV my secret key nao encontrada '});            
         }
 
         if(!req || !req.headers){
-            res.status(400).json({ error: 'Não foi possível validar o token de acesso '});
+            return res.status(400).json({ error: 'Não foi possível validar o token de acesso '});
         }
 
         if(req.method !== 'OPTIONS'){
