@@ -52,7 +52,7 @@ const saveTask = async(req:NextApiRequest, res:NextApiResponse<DefaultResponseMs
 
         const final = {
             ...task,
-            userId: '6168f1d0810eea90c3ba7be9',
+            userId,
             finishDate: undefined
         } as Task;
 
