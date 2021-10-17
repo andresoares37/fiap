@@ -7,11 +7,10 @@ import { DefaultResponseMsg } from '../../types/DefautResponseMsg';
 import {Login} from '../../types/Login';
 import {LoginResponse} from '../../types/LoginResponse';
 
-const handler = async (req : NextApiRequest, res : NextApiResponse<DefaultResponseMsg | LoginResponse>) =>{
-    try
-    {
+const handler = async (req : NextApiRequest, res : NextApiResponse<DefaultResponseMsg | LoginResponse>) => {
+    try{
         if(req.method !== 'POST'){
-            res.status(400).json({error: 'Metodo solicitado não existe'});
+            res.status(400).json({ error: 'Metodo solicitado nao existe '});
             return;
         }
 
@@ -33,12 +32,11 @@ const handler = async (req : NextApiRequest, res : NextApiResponse<DefaultRespon
                 }
             }
         }
-        res.status(400).json({error: 'Usuário ou senha inválidos'});        
-    }
-    catch(e)
-    {
+
+        res.status(400).json({ error: 'Usuario ou senha invalidos '});
+    }catch(e){
         console.log('Ocorreu erro ao autenticar usuario: ', e);
-        res.status(500).json({error: 'Ocorreu erro ao autenticar usuario , tente novamente '});
+        res.status(500).json({ error: 'Ocorreu erro ao autenticar usuario, tente novamente '});
     }
 }
 

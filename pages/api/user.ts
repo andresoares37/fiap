@@ -5,23 +5,23 @@ import { User } from '../../types/User';
 import connectDB from '../../middlewares/connectDB';
 import { UserModel } from '../../models/UserModel';
 
-const handler = async (req : NextApiRequest, res : NextApiResponse<DefaultResponseMsg>) => {
+const handler = async(req : NextApiRequest, res : NextApiResponse<DefaultResponseMsg>) =>{
     try{
         if(req.method !== 'POST'){
-            res.status(400).json({error: 'Metodo solicitado não existe'});
+            res.status(400).json({ error: 'Metodo solicitado nao existe '});
             return;
-        }       
+        }
 
         if(req.body){
             const user = req.body as User;
             if(!user.name || user.name.length < 3){
-                res.status(400).json({error: 'Nome do usuario inválido'});
+                res.status(400).json({ error: 'Nome do usuario invalido'});
                 return;
             }
 
             if(!user.email || !user.email.includes('@') || !user.email.includes('.')
-                ||user.email.length < 4){
-                res.status(400).json({error: 'Email do usuario inválido'});
+                || user.email.length < 4){
+                res.status(400).json({ error: 'Email do usuario invalido'});
                 return;
             }
 
@@ -31,15 +31,9 @@ const handler = async (req : NextApiRequest, res : NextApiResponse<DefaultRespon
                 return;
             }
 
-            if(!user.password || user.password.length < 4){
-                res.status(400).json({error: 'Senha do usuario inválida'});
-                return;
-            }
-
             const existingUser = await UserModel.find({email : user.email});
-
             if(existingUser && existingUser.length > 0){
-                res.status(400).json({error: 'Já existe usuário com o email informado'});
+                res.status(400).json({ error: 'Ja existe usuario com o email informado'});
                 return;
             }
 
@@ -49,14 +43,14 @@ const handler = async (req : NextApiRequest, res : NextApiResponse<DefaultRespon
             }
 
             await UserModel.create(final);
-            res.status(200).json({msg:'User adicionado com sucesso'});
+            res.status(200).json({msg: 'Usuario adicionado com sucesso'});
             return;
-
         }
-        res.status(400).json({error: 'Parâmetros de entrada inválidos'});
-    }catch(e){        
+
+        res.status(400).json({error: 'Parametros de entrada invalidos'});
+    }catch(e){
         console.log('Ocorreu erro ao criar usuario: ', e);
-        res.status(500).json({error: 'Ocorreu erro ao criar usuario , tente novamente '});
+        res.status(500).json({ error: 'Ocorreu erro ao criar usuario, tente novamente '});
     }
 }
 
